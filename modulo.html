@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Clockwork</title>
+<style>
+body{
+	background-color: black;
+	color: white;
+	font-size:20px;
+}
+canvas{
+	background-color: black;
+}
+#myModulo{
+	position:absolute;
+	left: 300px;
+	top: 200px;
+}
+#myModulo1{
+	position:absolute;
+	left: 550px;
+	top: 200px;
+}
+#myModulo2{
+	position:absolute;
+	left: 300px;
+	top: 450px;
+}
+#myModulo3{
+	position:absolute;
+	left: 550px;
+	top: 450px;
+}
+
+
+button{
+	margin:0 20px;
+	display:inline-block;
+	color:white;
+	font-size:1em;
+	border:1px solid white;
+	background:#000000;
+	border-radius:10px;
+	line-height:2em;
+	text-decoration:none;
+	width: 75px;
+	height: 50px;
+}
+input{
+	margin: 0 20px;
+	display:inline-block;
+	color:white;
+	font-size:1em;
+	border:1px solid white;
+	background:black;
+	border-radius:5px;
+	line-height:1em;
+	text-decoration:none;
+	width: 75px;
+	height: 30px;
+	text-align:right;
+}
+</style>
+</head>
+
+<body>
+<center><h1>Mod Art</h1></center>
+
+<canvas id="myModulo" width="250" height="250" style="border:1px solid #000000;">Your browser does not support the HTML5 canvas tag.</canvas>
+<canvas id="myModulo1" width="250" height="250" style="border:1px solid #000000;">Your browser does not support the HTML5 canvas tag.</canvas>
+<canvas id="myModulo2" width="250" height="250" style="border:1px solid #000000;">Your browser does not support the HTML5 canvas tag.</canvas>
+<canvas id="myModulo3" width="250" height="250" style="border:1px solid #000000;">Your browser does not support the HTML5 canvas tag.</canvas>
+
+<script>
+var c = document.getElementById("myModulo");
+var ctx = c.getContext("2d");
+var c1 = document.getElementById("myModulo1");
+var ctx1 = c1.getContext("2d");
+ctx1.translate(250,0);
+ctx1.scale(-1,1);
+var c2 = document.getElementById("myModulo2");
+var ctx2 = c2.getContext("2d");
+ctx2.translate(0,250);
+ctx2.scale(1,-1);
+var c3 = document.getElementById("myModulo3");
+var ctx3 = c3.getContext("2d");
+ctx3.translate(250,250);
+ctx3.scale(-1,-1);
+
+function Main(){
+//background
+ctx.fillStyle = "black";
+ctx.fillRect(0,0,250,250);
+//set default styles
+defaultStyle();
+//get text input
+var it = getTextInput("iter");
+var yud = checkInp(it);
+	if(yud){
+		it = makeInt(it);
+		//get division size
+		var hwsize = document.getElementById("myModulo").width;
+		var wsizediv = getGrid(hwsize,it);
+		var hsizediv = getGrid(hwsize,it);
+		//compute values for grid
+		var A = makeArr(it);
+		//draw each square into its proper number
+		draw(A, it, wsizediv, hsizediv,ctx);
+		draw(A, it, wsizediv, hsizediv,ctx1);
+		draw(A, it, wsizediv, hsizediv,ctx2);
+		draw(A, it, wsizediv, hsizediv,ctx3);
+		//draw on other canvases reflected
+		
+		
+	}else {
+		alert("Please input a nonzero positive integer and try again.");
+	}
+}
+
+<!--functions----------------------------------------------------->
+
+function defaultStyle(){
+	ctx.font = '10pt Calibri';
+	ctx.lineWidth = 1;
+	ctx.strokeStyle = 'white';
+	ctx.fillStyle = 'white';
+	ctx.shadowColor = "white";
+}
+
+function getTextInput(nam){
+	var inp = document.getElementById(nam).value;
+	return inp;
+}
+
+function makeInt(str){
+	var toint = str;
+	toint = parseInt(toint);
+	return toint;
+}
+
+function checkInp(n){
+	var iswhat = n;
+	if(isNaN(iswhat) || iswhat == 0){
+		return false;
+	}else {
+		return true;
+	}
+}
+
+function getGrid(si,num){
+	var size = si;
+	var division = size/num;
+	return division;
+}
+
+function makeArr(itera){
+	var bigArr = [];
+	for (i = 0; i < itera; i++){
+	bucket = [];
+		for(j=0; j < itera; j++){
+			bucket.push((i+j)%itera);
+		}
+		bigArr.push(bucket);
+	}
+	return bigArr;
+}
+
+function draw(inputarray, lenths, intervalx, intervaly,machine){
+	var B = inputarray;
+	var movex = intervalx;
+	var movey = intervalx;
+	var x = 0;
+	var y = 0;
+	var co = machine;
+	
+	for(i = 0; i < lenths; i++){
+		y = intervaly * i;
+		for(j = 0; j < lenths; j++){
+		x = intervalx * j; 
+			switch (B[i][j]){
+				case 0:
+					co.fillStyle = "red";
+					co.fillRect(x,y,movex,movey);
+					break;
+				case 1:
+					co.fillStyle = "00BFFF";
+					co.fillRect(x,y,movex,movey);
+					break;
+				case 2:
+					co.fillStyle = "#008B8B";
+					co.fillRect(x,y,movex,movey);
+					break;
+				case 3:
+					co.fillStyle = "#008080";
+					co.fillRect(x,y,movex,movey);
+					break;
+				case 4:
+					co.fillStyle = "#008000";
+					co.fillRect(x,y,movex,movey);
+					break;
+				case 5:
+					co.fillStyle = "#006400";
+					co.fillRect(x,y,movex,movey);
+					break;
+				case 6:
+					co.fillStyle = "#0000FF";
+					co.fillRect(x,y,movex,movey);
+					break;
+				case 7:
+					co.fillStyle = "#0000CD";
+					co.fillRect(x,y,movex,movey);
+					break;
+				case 8:
+					co.fillStyle = "#00008B";
+					co.fillRect(x,y,movex,movey);
+					break;
+				case 9:
+					co.fillStyle = "#000080";
+					co.fillRect(x,y,movex,movey);
+					break;
+				
+			}
+		}
+	}
+}
+<!---------------------------------------------------------------->
+</script>
+
+<div id="controls">
+
+Modulo:<input type = "text" id="iter" value="#####"/>
+<button type='btn' onclick = 'Main()'>Play</button>
+
+</div>
+
+
+</body>
+
+</html>
