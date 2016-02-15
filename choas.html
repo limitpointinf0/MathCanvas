@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Order in Chaos</title>
+<style>
+body{
+	background-color: black;
+	color: white;
+	font-size:20px;
+}
+canvas{
+	margin: 10px 100px;
+	background-color: black;
+	border-radius: 10px;
+}
+button{
+	margin:0 20px;
+	display:inline-block;
+	color:white;
+	font-size:1em;
+	border:1px solid white;
+	background:#000000;
+	border-radius:10px;
+	line-height:2em;
+	text-decoration:none;
+	width: 75px;
+	height: 50px;
+}
+input{
+	margin: 0 20px;
+	display:inline-block;
+	color:white;
+	font-size:1em;
+	border:1px solid white;
+	background:black;
+	border-radius:5px;
+	line-height:1em;
+	text-decoration:none;
+	width: 75px;
+	height: 30px;
+	text-align:right;
+}
+</style>
+</head>
+
+<body>
+<center><h1>Order in Chaos</h1></center>
+<center><p>The Chaos Game which will eventually give rise to the sierpinski triangle, a very famous fractal to mathematicians. Try inputting the number of times you would like to the program to play. I suggest anything between 10000 to 30000 for clarity.</p></center>
+<center><canvas id="myChaos" width="400" height="400" style="border:1px solid #d3d3d3;">Your browser does not support the HTML5 canvas tag.</canvas></center>
+
+<script>
+var c = document.getElementById("myChaos");
+var ctx = c.getContext("2d");
+startMessage();
+
+function Main(){
+//background
+ctx.fillStyle = "black";
+ctx.fillRect(0,0,400,400);
+//set default styles
+defaultStyle();
+//the triangle
+makeTriangle();
+//get iterations
+var it = getTextInput("iter");
+var yud = checkInp(it);
+
+	if(yud){
+		it = makeInt(it);
+		//start drawing
+		var count = 0;
+
+		//randomly choose a point in the triangle
+		var firstpoint = randChoice();
+		while(count < it){
+		count++;
+		draw(firstpoint[0],firstpoint[1]); 
+		var rand1 = rollDie();
+		var newpoint = getNewPoint(firstpoint[0],firstpoint[1],rand1);
+		draw(newpoint[0],newpoint[1]);
+		firstpoint = newpoint;
+		}
+	}else {
+		alert("Please input a nonzero positive integer and try again.");
+	}
+}
+
+<!--functions----------------------------------------------------->
+function defaultStyle(){
+	ctx.font = '10pt Calibri';
+	ctx.lineWidth = 1;
+	ctx.strokeStyle = 'white';
+	ctx.fillStyle = 'white';
+	ctx.shadowBlur = 15;
+	ctx.shadowColor = "white";
+}
+
+function makeTriangle(){
+	ctx.beginPath();
+	ctx.moveTo(200,30);
+	ctx.lineTo(370,370);
+	ctx.lineTo(30,370);
+	ctx.closePath();
+	ctx.stroke();
+
+	ctx.strokeText("1,2", 190, 20);
+	ctx.strokeText("3,4", 5, 370);
+	ctx.strokeText("5,6", 380, 370);
+}
+
+
+function randChoice(){
+	var randArr = [];
+	var randx = Math.floor((Math.random() * 400))
+	var randy = Math.floor((Math.random() * 400))
+	randArr.push(randx);
+	randArr.push(randy);
+	return randArr;
+}
+
+function rollDie(){
+	var die = Math.floor((Math.random() * 6) + 1);
+	return die;
+}
+
+function getNewPoint(x0,y0,d){
+	var xinit = x0;
+	var yinit = y0;
+	var xnew = 0;
+	var ynew = 0;
+	var chance = d;
+	switch(chance){
+		case 1:
+		case 2:
+			xnew = xinit + (200 - xinit)/2;
+			ynew = yinit + (30 - yinit)/2;
+			break;
+		case 3:
+		case 4:
+			xnew = xinit + (30 - xinit)/2;
+			ynew = yinit + (370 - yinit)/2;
+			break;
+		case 5:
+		case 6:
+			xnew = xinit + (370 - xinit)/2;
+			ynew = yinit + (370 - yinit)/2;
+			break;
+	}
+	var newcoordarr = [xnew,ynew];
+	return newcoordarr;
+}
+
+function draw(x,y){
+	var xcoord = x;
+	var ycoord = y;
+	ctx.beginPath();
+    ctx.arc(xcoord, ycoord, 0.5, 0, 2 * Math.PI, false);
+    ctx.fill();
+}
+
+
+function startMessage(){
+	ctx.font = '50pt Calibri';
+	ctx.lineWidth = 1;
+	ctx.strokeStyle = 'white';
+	ctx.fillStyle = 'white';
+	ctx.shadowBlur = 15;
+	ctx.shadowColor = "white";
+	ctx.fillText("Click play!",60,200);
+}
+
+function getTextInput(nam){
+	var inp = document.getElementById(nam).value;
+	return inp;
+}
+
+function makeInt(str){
+	var toint = str;
+	toint = parseInt(toint);
+	return toint;
+}
+
+function checkInp(n){
+	var iswhat = n;
+	if(isNaN(iswhat) || iswhat == 0){
+		return false;
+	}else {
+		return true;
+	}
+}
+<!---------------------------------------------------------------->
+</script>
+
+<div id="controls">
+<center>
+Iterations:<input type = "text" id="iter" value="#####"/>
+<button type='btn' onclick = 'Main()'>Play</button>
+</center>
+</div>
+
+
+</body>
+
+</html>
